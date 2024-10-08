@@ -6,7 +6,8 @@ import wilsonsGenerator from './wilsonsGenerator/wilsonsGenerator'
 type index = [number, number]
 
 type equalityFunctionType<T> = (
-    element: T,
+    valueA: T,
+    ValueB: T
 )=>boolean
 
 class gameMap<T>{
@@ -44,6 +45,18 @@ class gameMap<T>{
         if(this.isValidIndex(index)) this.multArray[index[0]][index[1]] = value
     }
 
+    public setBaseValueAtIndex = (index: index) : void => {
+        if(this.isValidIndex(index)) this.setValueAtIndex(index, this.baseElement)
+    }
+
+    public fillWithValue = (value: T): void => {
+        this.multArray = [...Array(this.height)].map(_=>[...Array(this.width)].map(():T=>value))
+    }
+
+    /**
+     * Places values randomly across the map
+     * @param value T
+     */
     public generateRandomly = (value: T):void => {
         for(let i = 0; i < this.height; i++){
             for(let j = 0; j < this.width; j++){
@@ -52,6 +65,12 @@ class gameMap<T>{
         }
     }
 
+    /**
+     * Crawls around the map creating a path. 
+     * @param verticalCrawlCount The number of top to bottom crawls
+     * @param horizontalCrawlCount The number of left to right crawls
+     * @param value The value for the path
+     */
     public generateCrawler = (verticalCrawlCount:number, horizontalCrawlCount:number, value: T):void => {
         crawlingGenerator(this, verticalCrawlCount, horizontalCrawlCount, value)
     }
@@ -60,8 +79,8 @@ class gameMap<T>{
         recursiveGenerator(this, startIndex, value, equalityFunction)
     }
 
-    public generateWilsons = (startIndex: index, value: T, validValue: T, equalityFunction: equalityFunctionType<T>, loopLimit: number): void => {
-        wilsonsGenerator(this, startIndex, loopLimit, equalityFunction, value, validValue)
+    public generateWilsons = (startIndex: index, maxPathSize:number, unwalkableValue: T, possiblePathValue: T, equalityFunction: equalityFunctionType<T>): void => {
+        wilsonsGenerator(this, maxPathSize, startIndex, equalityFunction, unwalkableValue, possiblePathValue)
     }
 }
 

@@ -11,7 +11,7 @@ import shuffle from './shuffle'
  * @returns map<T>
  */
 const recursiveGenerator = <T>(map: gameMap<T>, index: index, value: T, equalityFunction: equalityFunctionType<T>):gameMap<T> =>{
-    if(countNeighbors(map, 1, index, equalityFunction, false) > 1) return map
+    if(countNeighbors(map, 1, index, equalityFunction, value, false) > 1) return map
     map.setValueAtIndex(index, value)
 
     const nextMoves = shuffle<index>([

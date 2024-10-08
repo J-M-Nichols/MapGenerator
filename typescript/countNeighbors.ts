@@ -12,7 +12,7 @@ import map, {index, equalityFunctionType} from './gameMap'
  * @param countDiagonals boolean
  * @returns number
  */
-const countNeighbors = <T>(map: map<T>, range : number, index : index, equalityFunction : equalityFunctionType<T>, countDiagonals: boolean = false): number => {
+const countNeighbors = <T>(map: map<T>, range : number, index : index, equalityFunction : equalityFunctionType<T>, countedValue: T, countDiagonals: boolean = false): number => {
     const multArray:T[][] = map.getMultArray() 
     
     //get multArray dimensions
@@ -36,7 +36,7 @@ const countNeighbors = <T>(map: map<T>, range : number, index : index, equalityF
             const newRowIndex = index[0] + i
             const newColumnIndex = index[1] + j
             
-            if((newRowIndex >= 0 && newRowIndex < height && newColumnIndex >= 0 && newColumnIndex < width) && equalityFunction(multArray[newRowIndex][newColumnIndex])) count++
+            if((newRowIndex >= 0 && newRowIndex < height && newColumnIndex >= 0 && newColumnIndex < width) && equalityFunction(multArray[newRowIndex][newColumnIndex], countedValue)) count++
         }
     }
 

@@ -1,134 +1,66 @@
-import countNeighbors from "../countNeighbors"
 import gameMap, { equalityFunctionType, index } from "../gameMap"
-import shuffle from "../shuffle"
+import walk from './walk'
+import getAvailableIndexes from './getAvailableIndexes'
+import firstWalk from './firstWalk'
+import countNeighbors from "../countNeighbors"
 
-let mapLocations: index[] = [
-    [1, 0],
-    [0, 1],
-    [-1, 0],
-    [0, -1],
-]
-
-const getAvailableCells = <T>(map: gameMap<T>, equalityFunction: equalityFunctionType<T>): index[] => {
-    let locations: index[] = []
-
-    for(let i = 0; i < map.getHeight(); i++){
-        for(let j = 0; j < map.getWidth(); j++){
-            if(countNeighbors(map, 1, [i, j], equalityFunction, false) === 0){
-                locations.push([i, j])
-            }
-        }
+/**
+ * Generates a path through the map using Wilson's algorithm : https://en.wikipedia.org/wiki/Maze_generation_algorithm 
+ * @param map  The current game map element
+ * @param maxPathSize The maximum size for the path
+ * @param startIndex The index that the path begins at
+ * @param equalityFunction A function to determine if 2 elements are equal
+ * @param unwalkableValue A value that denotes a part of the map that cannot be walked on
+ * @param possiblePathValue A temporary value that denotes a part of the map that may be the next path
+ */
+const wilsonsGenerator = <T>(map: gameMap<T>, maxPathSize:number, startIndex:index, equalityFunction: equalityFunctionType<T>, unwalkableValue: T, possiblePathValue: T): void => {
+    //don't even search for a path if either of our path values are equal
+    if(equalityFunction(unwalkableValue, possiblePathValue) || equalityFunction(unwalkableValue, map.getBaseElement()) || equalityFunction(possiblePathValue, map.getBaseElement())){
+        throw new Error(`Neither the unwalkableValue, possiblePathValue nor the map base element can be equal.`)
     }
-
-    return locations
-}
-
-const randomWalk = <T>(map: gameMap<T>,  unusedMapLocations: index[], equalityFunction: equalityFunctionType<T>, loopLimit: number, value: T, validValue: T) => {
-    const width: number = map.getWidth()
-    const height: number = map.getHeight()
     
-    //get a random location from the unused map locations
-    let mapLocation: index = unusedMapLocations[Math.floor(Math.random() * unusedMapLocations.length)]
-
-    //start the walk with the random location
-    let locationsInWalk : index[] = [mapLocation]
-
-    //prevent excessive looping
-    let loop: number = 0
-
-    //track and see if this is a valid path
-    let validPath = false
-
-    while (
-        mapLocation[0] >= 0 && 
-        mapLocation[0] < height && 
-        mapLocation[1] >= 0 &&
-        mapLocation[1] < width &&
-        !validPath &&
-        loop++ < loopLimit
-    ){
-        //mark this location as a walkable path
-        map.setValueAtIndex(mapLocation, validValue)
-
-        //count the number of cells with the validValue
-        const neighborCount = countNeighbors(map, 1, mapLocation, equalityFunction, false)
-
-        //This is a valid path if we have exactly 1 neighbor
-        validPath = neighborCount === 1
-
-        //if we have more than 1 neighbor then move back
-        if(neighborCount > 1) break
-
-        //get a random index from the mapLocations
-        mapLocations = shuffle(mapLocations)
-
-        let nextLocation: index = [-1, -1]
-
-        mapLocations.every((el)=>{
-            nextLocation = [
-                mapLocation[0] + el[0],
-                mapLocation[1] + el[1],
-            ]
-
-            return !map.isValidIndex(nextLocation)
-        })
-
-
-        if(map.isValidIndex(nextLocation) && countNeighbors(map, 1, nextLocation, equalityFunction, false) < 2){
-            locationsInWalk.push(mapLocation)
-            mapLocation = nextLocation
-        }
-    }
-
-    if(validPath){
-        map.setValueAtIndex(mapLocation, validValue)
-
-        locationsInWalk.forEach(element=>{
-            map.setValueAtIndex(element, validValue)
-        })
-    } else {
-        locationsInWalk.forEach(element => {
-            map.setValueAtIndex(element, value)
-        })
-    }
-}
-
-const wilsonsGenerator = <T>(map: gameMap<T>, startIndex:index, loopLimit: number, equalityFunction: equalityFunctionType<T>, value: T, validValue: T): void => {
+    //get the dimensions of the map
     const width = map.getWidth()
     const height = map.getHeight()
 
-    //fill array with value
+    //fill array with unwalkable value
     for(let i = 0; i < height; i++){
         for(let j = 0; j < width; j++){
-            map.setValueAtIndex([i, j], value)
+            map.setValueAtIndex([i, j], unwalkableValue)
         }
     }
 
-    map.setValueAtIndex(startIndex, validValue)
+    //create the main path for the map
+    firstWalk(map, maxPathSize, startIndex, possiblePathValue, equalityFunction)
 
-    //prevent excesive looping
-    let limit = 0
+    //track the badIndexes that cannot be added to the main path so they can be ignored
+    const badIndexes:index[] = []
 
-    let lastCount = -1
-    let unusedMapLocations:index[] = getAvailableCells(map, equalityFunction)
-    let currentCount = unusedMapLocations.length
-    randomWalk(map, unusedMapLocations, equalityFunction, loopLimit, value, validValue)
-    // while(currentCount > 1 && (limit++ < loopLimit || lastCount!= currentCount)){
-    //     lastCount = currentCount
+    //Get the next indexes that can be moved on
+    let nextIndexes = getAvailableIndexes(map, badIndexes, equalityFunction)
 
-    //     randomWalk(map, unusedMapLocations, equalityFunction, loopLimit, value, validValue)
+    //While we can start a new path, start a new path and see if the indexes can be added to the main path
+    while(nextIndexes.length > 0){
+        //perform the next walk and grab the indexes that cannot be added to a path
+        const foundBadIndexes = walk(map, maxPathSize, nextIndexes[0], unwalkableValue, possiblePathValue, equalityFunction)
 
-    //     unusedMapLocations = getAvailableCells(map, equalityFunction)
-    //     console.log(unusedMapLocations)
-    //     map.logMap()
-    //     currentCount = unusedMapLocations.length
-    // }
+        //we have found some indexes that cannot be added to the main path, save them so we don't keep going there
+        if(foundBadIndexes.length > 0) badIndexes.push(...foundBadIndexes)
 
-    // for(let i = 0; i < height; i++){
-    //     for(let j = 0; j < width; j++){
-    //         if(map.isValidIndex([i, j]) && map.getValueAtIndex([i, j]) === validValue) map.setValueAtIndex([i, j], map.getBaseElement())
-    //     }
-    // }
+        //get the next indexes that can be moved on
+        nextIndexes = getAvailableIndexes(map, badIndexes, equalityFunction)
+    }
+
+    //fill the holes left in the map where there is an unwalkable value with a neighbor count that is greater than 0 and less than or equal to the maxPathSize
+    for(let i = 0; i < height; i++){
+        for(let j = 0; j < width; j++){
+            const index:index = [i, j]
+            const neighborCount = countNeighbors(map, 1, index, equalityFunction, map.getBaseElement(), false)
+            if(equalityFunction(map.getValueAtIndex(index), unwalkableValue) && neighborCount > 0 && neighborCount <= maxPathSize){
+                map.setBaseValueAtIndex(index)
+            }
+        }
+    }
 }
 
 export default wilsonsGenerator

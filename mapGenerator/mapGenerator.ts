@@ -1,6 +1,5 @@
 import recursiveGenerator from './recursiveGenerator/recursiveGenerator'
 import crawlingGenerator from './crawlingGenerator/crawlingGenerator'
-import coinFlip from './helpers/coinFlip'
 import wilsonsGenerator from './wilsonsGenerator/wilsonsGenerator'
 import primsGenerator from './primsGenerator/primsGenerator'
 import fillHoles from './helpers/fillHoles/fillHoles'
@@ -47,7 +46,7 @@ type indexValue<T> = {
 /**
  * A typical game map creates and manages a multidimensional array
  */
-class gameMap<T>{
+class mapGenerator<T>{
     private multArray: T[][]
     private width: number
     private height: number
@@ -92,7 +91,7 @@ class gameMap<T>{
      * Changes the base value for this game map
      * @param newBaseValue The new value for the path
      */
-    public setBaseValue = (newBaseValue: T):gameMap<T> => {
+    public setBaseValue = (newBaseValue: T):mapGenerator<T> => {
         this.baseValue = newBaseValue
 
         return this
@@ -101,7 +100,7 @@ class gameMap<T>{
     /**
      * logs this multArray to the console with table
      */
-    public logMap = (): gameMap<T> => {
+    public logMap = (): mapGenerator<T> => {
         console.log(this.generatedType)
         console.table(this.multArray)
 
@@ -133,7 +132,7 @@ class gameMap<T>{
      * @param index The index to set the value at
      * @param value The value to set at the index
      */
-    public setValueAtIndex = (index: index, value: T):gameMap<T> => {
+    public setValueAtIndex = (index: index, value: T):mapGenerator<T> => {
         if(this.isValidIndex(index)) this.multArray[index[0]][index[1]] = value
 
         return this
@@ -144,7 +143,7 @@ class gameMap<T>{
      * @param value The value to set
      * @param indexes The indexes to set the value at
      */
-    public setValueAtIndexes = (value: T, ...indexes: index[]): gameMap<T> => {
+    public setValueAtIndexes = (value: T, ...indexes: index[]): mapGenerator<T> => {
         indexes.forEach(el=>this.setValueAtIndex(el, value))
 
         return this
@@ -154,7 +153,7 @@ class gameMap<T>{
      * Sets the value and index for each object
      * @param indexValues An array of {value, index} 
      */
-    public setValuesAtIndexes = (...indexValues: indexValue<T>[]): gameMap<T> => {
+    public setValuesAtIndexes = (...indexValues: indexValue<T>[]): mapGenerator<T> => {
         indexValues.forEach(({index, value})=>{
             this.setValueAtIndex(index, value)
         })
@@ -166,7 +165,7 @@ class gameMap<T>{
      * If the index is valid, set the value at the index to the baseValue used to create the map with
      * @param index The index to set the value at
      */
-    public setBaseValueAtIndex = (index: index) : gameMap<T> => {
+    public setBaseValueAtIndex = (index: index) : mapGenerator<T> => {
         if(this.isValidIndex(index)) this.setValueAtIndex(index, this.baseValue)
 
         return this
@@ -176,7 +175,7 @@ class gameMap<T>{
      * Fills the multArray with the given value
      * @param value The value to fill this multArray with
      */
-    public fillWithValue = (value: T): gameMap<T> => {
+    public fillWithValue = (value: T): mapGenerator<T> => {
         this.multArray = [...Array(this.height)].map(_=>[...Array(this.width)].map(():T=>value))
 
         return this
@@ -187,7 +186,7 @@ class gameMap<T>{
      * @param unwalkableValue The value to randomly place on the map
      * @param randomChance The chance from 0 to 0.9999 that a value will be unwalkable
      */
-    public generateRandomly = (unwalkableValue: T, randomChance: number):gameMap<T> => {
+    public generateRandomly = (unwalkableValue: T, randomChance: number):mapGenerator<T> => {
         //reset this map
         this.fillWithValue(this.baseValue)
         
@@ -210,7 +209,7 @@ class gameMap<T>{
      * @param horizontalCrawlCount The number of left to right crawls
      * @param unwalkableValue The value for the path
      */
-    public generateCrawler = (verticalCrawlCount:number, horizontalCrawlCount:number, unwalkableValue: T):gameMap<T> => {
+    public generateCrawler = (verticalCrawlCount:number, horizontalCrawlCount:number, unwalkableValue: T):mapGenerator<T> => {
         //fill array with unwalkable value
         this.fillWithValue(this.baseValue)
 
@@ -229,7 +228,7 @@ class gameMap<T>{
      * @param unwalkableValue The value that cannot be walked at
      * @param equalityFunction A function to determine if 2 values are equal
      */
-    public generateRecursively = (startIndex: index, maxPathSize: number, unwalkableValue: T, equalityFunction: equalityFunctionType<T>, shouldFillHoles: boolean):gameMap<T> => {
+    public generateRecursively = (startIndex: index, maxPathSize: number, unwalkableValue: T, equalityFunction: equalityFunctionType<T>, shouldFillHoles: boolean):mapGenerator<T> => {
         //don't even search for a path if either of our path values are equal
         if(equalityFunction(unwalkableValue, this.getBaseValue())){
             throw new Error(`Neither the unwalkableValue nor the map base element can be equal.`)
@@ -258,7 +257,7 @@ class gameMap<T>{
      * @param possiblePathValue A third value used to hold the place of a possible path
      * @param equalityFunction A function to determine if 2 values are equal
      */
-    public generateWilsons = (startIndex: index, maxPathSize:number, unwalkableValue: T, possiblePathValue: T, equalityFunction: equalityFunctionType<T>, shouldFillHoles: boolean): gameMap<T> => {
+    public generateWilsons = (startIndex: index, maxPathSize:number, unwalkableValue: T, possiblePathValue: T, equalityFunction: equalityFunctionType<T>, shouldFillHoles: boolean): mapGenerator<T> => {
         //don't even search for a path if either of our path values are equal
         if(equalityFunction(unwalkableValue, possiblePathValue) || equalityFunction(unwalkableValue, this.getBaseValue()) || equalityFunction(possiblePathValue, this.getBaseValue())){
             throw new Error(`Neither the unwalkableValue, possiblePathValue nor the map base element can be equal.`)
@@ -286,7 +285,7 @@ class gameMap<T>{
      * @param unwalkableValue The value that cannot be walked at
      * @param equalityFunction A function to determine if 2 values are equal
      */
-    public generatePrims = (startIndex: index, maxPathSize:number, unwalkableValue: T, equalityFunction: equalityFunctionType<T>, shouldFillHoles: boolean): gameMap<T> => {
+    public generatePrims = (startIndex: index, maxPathSize:number, unwalkableValue: T, equalityFunction: equalityFunctionType<T>, shouldFillHoles: boolean): mapGenerator<T> => {
         //don't even search for a path if either of our path values are equal
         if(equalityFunction(unwalkableValue, this.getBaseValue())){
             throw new Error(`Neither the unwalkableValue nor the map base element can be equal.`)
@@ -308,5 +307,5 @@ class gameMap<T>{
     }
 }
 
-export default gameMap
-export {index, equalityFunctionType}
+export default mapGenerator
+export {index, equalityFunctionType, generatedType, indexValue}

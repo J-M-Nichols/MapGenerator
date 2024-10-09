@@ -1,5 +1,5 @@
 import countNeighbors from '../helpers/countNeighbors'
-import gameMap, {index, equalityFunctionType} from '../gameMap'
+import mapGenerator, {index, equalityFunctionType} from '../mapGenerator'
 import shuffle from '../helpers/shuffle'
 
 /**
@@ -10,7 +10,7 @@ import shuffle from '../helpers/shuffle'
  * @param equalityFunction A function to determine if 2 values are equal
  * @returns The map with the current path walked
  */
-const recursiveGenerator = <T>(map: gameMap<T>, maxPathSize: number, startIndex: index, baseValue: T, equalityFunction: equalityFunctionType<T>):gameMap<T> =>{
+const recursiveGenerator = <T>(map: mapGenerator<T>, maxPathSize: number, startIndex: index, baseValue: T, equalityFunction: equalityFunctionType<T>):mapGenerator<T> =>{
     //we cannot move to this index, do not continue
     if(countNeighbors(map, 1, startIndex, equalityFunction, baseValue, false) > maxPathSize) return map
     
@@ -18,7 +18,7 @@ const recursiveGenerator = <T>(map: gameMap<T>, maxPathSize: number, startIndex:
     map.setValueAtIndex(startIndex, baseValue)
 
     //get the next moves that can be walked along
-    const nextMoves = shuffle<index>([
+    const nextMoves:index[] = shuffle<index>([
         [1 + startIndex[0], 0 + startIndex[1]],
         [0 + startIndex[0], 1 + startIndex[1]],
         [-1 + startIndex[0], 0 + startIndex[1]],

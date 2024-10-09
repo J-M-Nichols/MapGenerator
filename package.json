@@ -1,20 +1,35 @@
 {
-  "name": "generator",
+  "name": "@ng/map-generator-ts",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Creates and generates a 2 dimensional array with various path generation functions.",
+  "main": "./mapGenerator/mapGenerator.ts",
   "scripts": {
-    "test": "jest"
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts"
   },
-  "author": "",
+  "author": "Nichathan Gaming",
   "license": "ISC",
   "dependencies": {
     "ts-node": "^10.9.2",
     "typescript": "^5.6.2"
   },
-  "devDependencies": {
-    "@types/jest": "^29.5.13",
-    "jest": "^29.7.0",
-    "ts-jest": "^29.2.5"
-  }
+  "keywords": [
+    "Typescript",
+    "Map Generation",
+    "Pathfinding",
+    "Maze Generation",
+    "Algorithmic Generation",
+    "Grid Management",
+    "Procedural Generation",
+    "Recursive",
+    "Randomization",
+    "Crawling",
+    "Index Management",
+    "Value Assignment",
+    "Game Development",
+    "Multidimensional Array",
+    "Path Algorithms",
+    "Grid Navigation"
+  ]
 }

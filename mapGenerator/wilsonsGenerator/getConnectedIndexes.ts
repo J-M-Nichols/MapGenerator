@@ -1,5 +1,5 @@
 import countNeighbors from "../helpers/countNeighbors"
-import gameMap, { equalityFunctionType, index } from "../gameMap"
+import mapGenerator, { equalityFunctionType, index } from "../mapGenerator"
 import compareIndexes from "./compareIndexes"
 import getCross from "./getCross"
 
@@ -12,7 +12,7 @@ import getCross from "./getCross"
  * @param equalityFunction A function to determine if 2 elements are equal
  * @returns An array of indexes connected to the main path
  */
-const getConnectedIndexes = <T>(map: gameMap<T>, searchIndex: index, currentPath: index[], maxPathSize: number, equalityFunction: equalityFunctionType<T>): index[] => {
+const getConnectedIndexes = <T>(map: mapGenerator<T>, searchIndex: index, currentPath: index[], maxPathSize: number, equalityFunction: equalityFunctionType<T>): index[] => {
     let connectedIndexes : index[] = getCross(map, searchIndex)
 
     connectedIndexes = connectedIndexes.filter(el=>{

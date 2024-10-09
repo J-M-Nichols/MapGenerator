@@ -1,4 +1,4 @@
-import gameMap from "../gameMap"
+import mapGenerator from "../mapGenerator"
 import crawl from "./crawl"
 import getRandomRange from "./getRandomRange"
 
@@ -8,7 +8,7 @@ import getRandomRange from "./getRandomRange"
  * @param width The maximum range for moving horizontally
  * @param unwalkableValue A value that denotes a part of the map that cannot be walked on
  */
-const crawlVertically = <T>(map: gameMap<T>, width: number, unwalkableValue: T) => {
+const crawlVertically = <T>(map: mapGenerator<T>, width: number, unwalkableValue: T) => {
     crawl(map, [getRandomRange(1, width) , 1], [-1, 0], unwalkableValue)
 }
 

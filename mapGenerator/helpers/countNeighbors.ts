@@ -1,4 +1,4 @@
-import map, {index, equalityFunctionType} from '../gameMap'
+import map, {index, equalityFunctionType} from '../mapGenerator'
 
 /**
  * Counts the neighbors with a certain value around the index.

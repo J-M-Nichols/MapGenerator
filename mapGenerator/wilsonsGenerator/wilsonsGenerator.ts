@@ -1,9 +1,7 @@
-import gameMap, { equalityFunctionType, index } from "../gameMap"
+import mapGenerator, { equalityFunctionType, index } from "../mapGenerator"
 import walk from './walk'
 import getAvailableIndexes from './getAvailableIndexes'
 import firstWalk from './firstWalk'
-import countNeighbors from "../helpers/countNeighbors"
-import fillHoles from "../helpers/fillHoles/fillHoles"
 
 /**
  * Generates a path through the map 
@@ -15,7 +13,7 @@ import fillHoles from "../helpers/fillHoles/fillHoles"
  * @param unwalkableValue A value that denotes a part of the map that cannot be walked on
  * @param possiblePathValue A temporary value that denotes a part of the map that may be the next path
  */
-const wilsonsGenerator = <T>(map: gameMap<T>, maxPathSize:number, startIndex:index, equalityFunction: equalityFunctionType<T>, unwalkableValue: T, possiblePathValue: T): void => {
+const wilsonsGenerator = <T>(map: mapGenerator<T>, maxPathSize:number, startIndex:index, equalityFunction: equalityFunctionType<T>, unwalkableValue: T, possiblePathValue: T): void => {
     //create the main path for the map
     firstWalk(map, maxPathSize, startIndex, possiblePathValue, equalityFunction)
 

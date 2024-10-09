@@ -1,5 +1,5 @@
 import countNeighbors from "../helpers/countNeighbors"
-import gameMap, { equalityFunctionType, index } from "../gameMap"
+import mapGenerator, { equalityFunctionType, index } from "../mapGenerator"
 import shuffle from "../helpers/shuffle"
 
 /**
@@ -13,7 +13,7 @@ import shuffle from "../helpers/shuffle"
  * @param equalityFunction A function to determine if 2 elements are equal
  * @returns A shuffled and filtered array of indexes that this index can be moved at
  */
-const getNextMoves = <T>(map: gameMap<T>, maxPathSize: number, index: index, possiblePathValue: T, equalityFunction: equalityFunctionType<T>): index[] => {
+const getNextMoves = <T>(map: mapGenerator<T>, maxPathSize: number, index: index, possiblePathValue: T, equalityFunction: equalityFunctionType<T>): index[] => {
     const shuffled: index[] = shuffle<index>([
         [1 +  index[0], 0 +  index[1]],
         [0 +  index[0], 1 +  index[1]],

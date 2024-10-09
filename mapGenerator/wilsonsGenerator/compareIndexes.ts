@@ -1,4 +1,4 @@
-import { index } from "../gameMap"
+import { index } from "../mapGenerator"
 
 /**
  * Compares 2 indexes to see if they are equal.

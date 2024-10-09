@@ -1,5 +1,5 @@
 import countNeighbors from "../helpers/countNeighbors"
-import gameMap, { equalityFunctionType, index } from "../gameMap"
+import mapGenerator, { equalityFunctionType, index } from "../mapGenerator"
 import getNextMoves from './getNextMoves'
 import getConnectedIndexes from './getConnectedIndexes'
 
@@ -13,7 +13,7 @@ import getConnectedIndexes from './getConnectedIndexes'
  * @param equalityFunction A function to determine if 2 elements are equal
  * @returns indexes that cannot be connected to the main path
  */
-const walk = <T>(map: gameMap<T>, maxPathSize:number, startIndex: index, unwalkableValue: T, possiblePathValue: T, equalityFunction: equalityFunctionType<T>) : index[] => {
+const walk = <T>(map: mapGenerator<T>, maxPathSize:number, startIndex: index, unwalkableValue: T, possiblePathValue: T, equalityFunction: equalityFunctionType<T>) : index[] => {
     //get the next moves for the walk
     let nextMoves = getNextMoves(map, maxPathSize, startIndex, possiblePathValue, equalityFunction)
 

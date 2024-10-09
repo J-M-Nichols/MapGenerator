@@ -1,4 +1,4 @@
-import gameMap, { index } from "../gameMap"
+import mapGenerator, { index } from "../mapGenerator"
 import getRandomRange from "./getRandomRange"
 import coinFlip from '../helpers/coinFlip'
 
@@ -9,7 +9,7 @@ import coinFlip from '../helpers/coinFlip'
  * @param minIndex The minimum crawling index, either -1 or 0
  * @param unwalkableValue A value that denotes a part of the map that cannot be walked on
  */
-const crawl = <T>(map: gameMap<T>, startIndex:index, minIndex: index, unwalkableValue: T):void =>{
+const crawl = <T>(map: mapGenerator<T>, startIndex:index, minIndex: index, unwalkableValue: T):void =>{
     const width = map.getWidth()
     const height = map.getHeight()
 

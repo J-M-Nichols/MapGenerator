@@ -1,9 +1,9 @@
-import gameMap, { equalityFunctionType, index } from "../../gameMap"
+import mapGenerator, { equalityFunctionType, index } from "../../mapGenerator"
 import countNeighbors from "../countNeighbors"
 import shuffle from "../shuffle"
 import isValidHole from './isValidHole'
 
-const fillHoles = <T>(map: gameMap<T>, maxPathSize: number, unwalkableValue: T, equalityFunction: equalityFunctionType<T>):void => {
+const fillHoles = <T>(map: mapGenerator<T>, maxPathSize: number, unwalkableValue: T, equalityFunction: equalityFunctionType<T>):void => {
     //get the dimensions of the map
     const width = map.getWidth()
     const height = map.getHeight()

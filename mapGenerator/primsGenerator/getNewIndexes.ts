@@ -1,4 +1,4 @@
-import gameMap, { equalityFunctionType, index } from "../gameMap";
+import mapGenerator, { equalityFunctionType, index } from "../mapGenerator";
 import shuffle from "../helpers/shuffle";
 
 /**
@@ -13,7 +13,7 @@ import shuffle from "../helpers/shuffle";
  * @param equalityFunction A function to determine if 2 elements are equal
  * @returns A shuffled array of new indexes
  */
-const getNewIndexes = <T>(map: gameMap<T>, index: index, currentLocations: index[], baseValue: T, equalityFunction: equalityFunctionType<T>):index[] => {
+const getNewIndexes = <T>(map: mapGenerator<T>, index: index, currentLocations: index[], baseValue: T, equalityFunction: equalityFunctionType<T>):index[] => {
     const shuffledIndexes: index[] = shuffle([
         [index[0] + 1, index[1]],
         [index[0] - 1, index[1]],

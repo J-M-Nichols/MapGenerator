@@ -1,4 +1,4 @@
-import gameMap, { equalityFunctionType, index } from "../../gameMap"
+import mapGenerator, { equalityFunctionType, index } from "../../mapGenerator"
 
 /**
  * Determines if the search index has a base value below and above and not left or right and vice versa
@@ -7,7 +7,7 @@ import gameMap, { equalityFunctionType, index } from "../../gameMap"
  * @param equalityFunction A function to determine if 2 elements are equal
  * @returns If this is a valid hole or not
  */
-const isValidHole = <T>(map: gameMap<T>, searchIndex: index, equalityFunction: equalityFunctionType<T>):boolean => {
+const isValidHole = <T>(map: mapGenerator<T>, searchIndex: index, equalityFunction: equalityFunctionType<T>):boolean => {
     const searchIndexes: index[] = [
         [searchIndex[0]+1, searchIndex[1]],
         [searchIndex[0]-1, searchIndex[1]],

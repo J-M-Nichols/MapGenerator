@@ -1,4 +1,4 @@
-import gameMap, { equalityFunctionType, index } from "../gameMap"
+import mapGenerator, { equalityFunctionType, index } from "../mapGenerator"
 import getNextMoves from "./getNextMoves"
 
 /**
@@ -9,7 +9,7 @@ import getNextMoves from "./getNextMoves"
  * @param possiblePathValue A temporary value that denotes a part of the map that may be the next path
  * @param equalityFunction A function to determine if 2 elements are equal
  */
-const firstWalk = <T>(map: gameMap<T>, maxPathSize: number, startIndex: index, possiblePathValue: T, equalityFunction: equalityFunctionType<T>): void => {
+const firstWalk = <T>(map: mapGenerator<T>, maxPathSize: number, startIndex: index, possiblePathValue: T, equalityFunction: equalityFunctionType<T>): void => {
     //initiates the possible path at the starting index
     map.setValueAtIndex(startIndex, possiblePathValue)
     

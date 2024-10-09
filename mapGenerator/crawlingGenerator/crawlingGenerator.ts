@@ -1,4 +1,4 @@
-import gameMap from "../gameMap"
+import mapGenerator from "../mapGenerator"
 import crawlVertically from './crawlVertically'
 import crawlHorizontally from './crawlHorizontally'
 
@@ -9,7 +9,7 @@ import crawlHorizontally from './crawlHorizontally'
  * @param horizontalCrawlCount The number of times to crawl horizontally
  * @param unwalkableValue A value that denotes a part of the map that cannot be walked on
  */
-const crawlingGenerator = <T>(map: gameMap<T>, verticalCrawlCount: number, horizontalCrawlCount: number, unwalkableValue: T) => {
+const crawlingGenerator = <T>(map: mapGenerator<T>, verticalCrawlCount: number, horizontalCrawlCount: number, unwalkableValue: T) => {
     const width: number = map.getWidth()
     const height: number = map.getHeight()
 

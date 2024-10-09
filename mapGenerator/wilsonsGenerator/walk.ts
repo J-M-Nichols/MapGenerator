@@ -1,21 +1,19 @@
 import countNeighbors from "../helpers/countNeighbors"
-import mapGenerator, { equalityFunctionType, index } from "../mapGenerator"
+import mapGenerator, { index } from "../mapGenerator"
 import getNextMoves from './getNextMoves'
-import getConnectedIndexes from './getConnectedIndexes'
+import getWilsonsConnectedIndexes from './getWilsonsConnectedIndexes'
 
 /**
  * Walks through the map searching for a possible path at the startIndex then saves the path if it is valid
  * @param map The current game map element
  * @param maxPathSize The maximum size for the path
  * @param startIndex The index that the path begins at
- * @param unwalkableValue A value that denotes a part of the map that cannot be walked on
  * @param possiblePathValue A temporary value that denotes a part of the map that may be the next path
- * @param equalityFunction A function to determine if 2 elements are equal
  * @returns indexes that cannot be connected to the main path
  */
-const walk = <T>(map: mapGenerator<T>, maxPathSize:number, startIndex: index, unwalkableValue: T, possiblePathValue: T, equalityFunction: equalityFunctionType<T>) : index[] => {
+const walk = <T>(map: mapGenerator<T>, maxPathSize:number, startIndex: index, possiblePathValue: T) : index[] => {
     //get the next moves for the walk
-    let nextMoves = getNextMoves(map, maxPathSize, startIndex, possiblePathValue, equalityFunction)
+    let nextMoves = getNextMoves(map, maxPathSize, startIndex, possiblePathValue)
 
     //track the paths walked
     const walkedPath: index[][] = []
@@ -24,12 +22,11 @@ const walk = <T>(map: mapGenerator<T>, maxPathSize:number, startIndex: index, un
     let validPath = false
     
     //get connected paths in case the startIndex is also complete
-    const conn = getConnectedIndexes(
+    const conn = getWilsonsConnectedIndexes(
         map, 
         startIndex, 
         currentPath,
-        maxPathSize,
-        equalityFunction
+        maxPathSize
     )
     
     //we are connected, finish here
@@ -42,26 +39,27 @@ const walk = <T>(map: mapGenerator<T>, maxPathSize:number, startIndex: index, un
 
     //we have moves to make, search for a path
     let nextMove = nextMoves.splice(0, 1)[0]
+
     //add the rest of the moves in case our current move is invalid
     walkedPath.push(nextMoves)
+    
     //set the value at this index so it will affect the next move
     map.setValueAtIndex(startIndex, possiblePathValue)
 
     //continue along the path looking for a valid path
     while(!validPath){
         //see if this new move is connected to the main path
-        const conn = getConnectedIndexes(
+        const conn = getWilsonsConnectedIndexes(
             map, 
             nextMove, 
             currentPath,
-            maxPathSize,
-            equalityFunction
+            maxPathSize
         )
 
         //path has connected, set the path
         if(
             conn.length > 0 &&
-            countNeighbors(map, 1, nextMove, equalityFunction, map.getBaseValue(), false) <= maxPathSize
+            countNeighbors(map, 1, nextMove, map.getWalkableValue(), false) <= maxPathSize
         ){
             currentPath.push(nextMove)
             currentPath.push(conn[0])
@@ -75,7 +73,7 @@ const walk = <T>(map: mapGenerator<T>, maxPathSize:number, startIndex: index, un
         map.setValueAtIndex(nextMove, possiblePathValue)
 
         //get next moves
-        nextMoves = getNextMoves(map, maxPathSize, nextMove, possiblePathValue, equalityFunction)
+        nextMoves = getNextMoves(map, maxPathSize, nextMove, possiblePathValue)
 
         //determine if we can move forward or if we should move back
         if(nextMoves.length > 0){
@@ -85,7 +83,7 @@ const walk = <T>(map: mapGenerator<T>, maxPathSize:number, startIndex: index, un
             walkedPath.push(nextMoves)
         } else {
             //We cannot make any more moves on this path, add to badPath and move back
-            map.setValueAtIndex(nextMove, unwalkableValue)
+            map.setUnwalkableValueAtIndex(nextMove)
             badPath.push(nextMove)
 
             let foundNewPath = false
@@ -111,17 +109,8 @@ const walk = <T>(map: mapGenerator<T>, maxPathSize:number, startIndex: index, un
         }
     }
 
-    if(validPath){
-        currentPath.forEach(move=>{
-            map.setBaseValueAtIndex(move)
-        })
-    } else {
-        const pathToRemove: index[] = [...currentPath, ...badPath]
-
-        pathToRemove.forEach(move=>{
-            map.setValueAtIndex(move, unwalkableValue)
-        })
-    }
+    if(validPath) map.setWalkableValueAtIndexes(...currentPath)
+    else map.setUnwalkableValueAtIndexes(...currentPath, ...badPath)
 
     return badPath
 }

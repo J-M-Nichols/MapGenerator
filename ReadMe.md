@@ -40,16 +40,35 @@ npm install typescript-map-generator
 Here’s a basic example of how to use the MapGenerator class:
 
 ```typescript
+//define base values
+const equalityFunction: equalityFunctionType<number> = (a:number, b:number):boolean=>a===b
+const startingIndex: index = [0, 0]
+
 //randomly places unwalkable paths around the map
-const randomMap = new mapGenerator(10, 10, 0).generateRandomly(1, 0.5).logMap()
+new mapGenerator<number>(10, 10, 0, 1, equalityFunction).generateRandomly(0.75).logMap()
+new mapGenerator<number>(10, 10, 0, 1, equalityFunction).generateRandomly(0.5).logMap()
+new mapGenerator<number>(10, 10, 0, 1, equalityFunction).generateRandomly(0.25).logMap()
+
 //randomly crawls across the map horizontally and vertically
-const crawlingMap = new mapGenerator(10, 10, 0).generateCrawler(5, 4, 1).logMap()
+new mapGenerator<number>(10, 10, 0, 1, equalityFunction).generateCrawler(5, 3).logMap()
+
 //recursively traverses the map creating a path
-const recursiveMap = new mapGenerator(5, 10, 0).generateRecursively([0, 0], 1, 1, (a, b)=>a===b, true).logMap()
+new mapGenerator<number>(10, 10, 0, 1, equalityFunction).generateRecursively(startingIndex, 1, true).logMap()
+
 //traverses the map by creating new paths until they connect to the main path or are impossible to connect following Wilson's algorithm
-const wilsonsMap = new mapGenerator(10, 15, 0).generateWilsons([0, 0], 1, 1, 2, (a, b)=>a===b, true).logMap()
+new mapGenerator<number>(10, 10, 0, 1, equalityFunction).generateWilsons(startingIndex, 1, 2, true).logMap()
+
 //traverses the map by creating a minimum spanning tree following Prim's algorithm
-const primsMap = new mapGenerator(20, 4, 0).generatePrims([0, 0], 1, 1, (a, b)=>a===b, true).logMap()
+const map = new mapGenerator<number>(10, 10, 0, 1, equalityFunction).generatePrims(startingIndex, 1, true).logMap()
+
+//get and shuffle the walkable indexes
+const walkablePath = mapGenerator.shuffleArray(map.getWalkableIndexes())
+
+//test the pathfinding
+console.log(`starting index for path: [${walkablePath[0]}], ending index for path: [${walkablePath[1]}]`)
+const foundPath = map.getPath(walkablePath[0], walkablePath[1])
+console.log(foundPath)
+
 ```
 
 ## API
@@ -58,24 +77,54 @@ const primsMap = new mapGenerator(20, 4, 0).generatePrims([0, 0], 1, 1, (a, b)=>
 
 ### Methods
 
-- `getMultArray(): T[][]`: Returns the current map array.
+#### Getters
+
+- `areValuesAtIndexesEqual(indexA: index, indexB: index): boolean`: Determines if the values at two given indexes are equal using the provided equality function.
+- `isValueAtIndexEqualToValue(index: index, value: T): boolean`: Checks if the value at a given index is equal to a specified value.
+- `areValuesEqual(valueA: T, valueB: T): boolean`: Determines if two values are equal using the provided equality function.
+- `isIndexUnwalkable(index: index): boolean`: Checks if the value at a given index is equal to the unwalkable value.
+- `isValueUnwalkable(value: T): boolean`: Determines if a given value is equal to the unwalkable value.
+- `isIndexWalkable(index: index): boolean`: Checks if the value at a given index is equal to the walkable value.
+- `isValueWalkable(value: T): boolean`: Determines if a given value is equal to the walkable value.
+- `getMultArray(): T[][]`: Returns the current multidimensional array.
 - `getWidth(): number`: Returns the width of the map.
 - `getHeight(): number`: Returns the height of the map.
-- `getBaseValue(): T`: Returns the base value used in the map.
-- `setBaseValue(newBaseValue: T): MapGenerator<T>`: Sets a new base value for the map.
-- `logMap(): MapGenerator<T>`: Logs the map to the console.
-- `isValidIndex(index: [number, number]): boolean`: Checks if an index is within map bounds.
-- `getValueAtIndex(index: [number, number]): T`: Gets the value at a specific index.
-- `setValueAtIndex(index: [number, number], value: T): MapGenerator<T>`: Sets a value at a specific index.
-- `setValueAtIndexes(value: T, ...indexes: [number, number][]): MapGenerator<T>`: Sets a value at multiple specified indexes.
-- `setValuesAtIndexes(...indexValues: { value: T, index: [number, number] }[]): MapGenerator<T>`: Sets values at specified indexes using an array of index-value pairs.
-- `setBaseValueAtIndex(index: [number, number]): MapGenerator<T>`: Sets the base value at a specific index if it is valid.
-- `fillWithValue(value: T): MapGenerator<T>`: Fills the entire map with a specified value.
-- `generateRandomly(unwalkableValue: T, randomChance: number): MapGenerator<T>`: Randomly places a specified value on the map with a given probability.
-- `generateCrawler(verticalCrawlCount: number, horizontalCrawlCount: number, unwalkableValue: T): MapGenerator<T>`: Generates a path using a crawling algorithm.
-- `generateRecursively(startIndex: [number, number], maxPathSize: number, unwalkableValue: T, equalityFunction: EqualityFunctionType<T>, shouldFillHoles: boolean): MapGenerator<T>`: Recursively generates a path starting from a specified index.
-- `generateWilsons(startIndex: [number, number], maxPathSize: number, unwalkableValue: T, possiblePathValue: T, equalityFunction: EqualityFunctionType<T>, shouldFillHoles: boolean): MapGenerator<T>`: Generates a path using Wilson's algorithm.
-- `generatePrims(startIndex: [number, number], maxPathSize: number, unwalkableValue: T, equalityFunction: EqualityFunctionType<T>, shouldFillHoles: boolean): MapGenerator<T>`: Generates a path using Prim's algorithm.
+- `getWalkableValue(): T`: Returns the walkable value used in the map.
+- `getUnwalkableValue(): T`: Returns the unwalkable value used in the map.
+- `isValidIndex(index: index): boolean`: Checks if a given index is within the bounds of the map.
+- `getValueAtIndex(index: index): T`: Retrieves the value at a specified index.
+- `getAllIndexesForValue(value: T): index[]`: Returns an array of indexes where the specified value is found.
+- `getWalkableIndexes(): index[]`: Returns an array of indexes with the walkable value.
+- `getUnwalkableIndexes(): index[]`: Returns an array of indexes with the unwalkable value.
+- `getPath(startingIndex: index, endingIndex: index): index[] | null`: Finds a path between two indexes or returns null if no path is available.
+
+#### Setters
+
+- `changeGeneratedType(generatedType: generatedType): mapGenerator<T>`: Changes the current generated type.
+- `changeEqualityFunction(equalityFunction: equalityFunctionType<T>): mapGenerator<T>`: Changes the current equality function.
+- `setWalkableValue(newWalkableValue: T): mapGenerator<T>`: Sets a new walkable value for the map.
+- `setUnwalkableValue(newUnwalkableValue: T): mapGenerator<T>`: Sets a new unwalkable value for the map.
+- `setValueAtIndex(index: index, value: T): mapGenerator<T>`: Sets a value at a specified index. Throws an error if the index is not valid.
+- `setValueAtIndexes(value: T, ...indexes: index[]): mapGenerator<T>`: Sets a value at multiple specified indexes.
+- `setValuesAtIndexes(...indexValues: indexValue<T>[]): mapGenerator<T>`: Sets values at specified indexes using an array of index-value pairs.
+- `setWalkableValueAtIndex(index: index): mapGenerator<T>`: Sets the walkable value at a specified index if it is valid.
+- `setWalkableValueAtIndexes(...indexes: index[]): mapGenerator<T>`: Sets the walkable value at multiple specified indexes.
+- `setUnwalkableValueAtIndex(index: index): mapGenerator<T>`: Sets the unwalkable value at a specified index if it is valid.
+- `setUnwalkableValueAtIndexes(...indexes: index[]): mapGenerator<T>`: Sets the unwalkable value at multiple specified indexes.
+- `fillWithValue(value: T): mapGenerator<T>`: Fills the entire multidimensional array with a specified value.
+
+#### Helpers
+
+- `logMap(): mapGenerator<T>`: Logs the current state of the multidimensional array to the console.
+- `static shuffleArray<U>(array: U[]): U[]`: Shuffles the elements of an array and returns the shuffled array.
+
+#### Generators
+
+- `generateRandomly(randomChance: number): mapGenerator<T>`: Randomly places the unwalkable value across the map with a specified probability.
+- `generateCrawler(verticalCrawlCount: number, horizontalCrawlCount: number): mapGenerator<T>`: Generates a path using a crawling algorithm.
+- `generateRecursively(startIndex: index, maxPathSize: number, shouldFillHoles: boolean): mapGenerator<T>`: Recursively generates a path starting from a specified index.
+- `generateWilsons(startIndex: index, maxPathSize: number, possiblePathValue: T, shouldFillHoles: boolean): mapGenerator<T>`: Generates a path using Wilson's algorithm.
+- `generatePrims(startIndex: index, maxPathSize: number, shouldFillHoles: boolean): mapGenerator<T>`: Generates a path using Prim's algorithm.
 
 ## Contributing
 

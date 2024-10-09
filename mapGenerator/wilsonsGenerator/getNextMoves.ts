@@ -1,6 +1,6 @@
 import countNeighbors from "../helpers/countNeighbors"
-import mapGenerator, { equalityFunctionType, index } from "../mapGenerator"
-import shuffle from "../helpers/shuffle"
+import mapGenerator, { index } from "../mapGenerator"
+import getConnectedIndexes from "../helpers/getConnectedIndexes"
 
 /**
  * Gets a shuffled array of possible indexes that are filtered based on if the index is within the bounds of the map, 
@@ -8,26 +8,17 @@ import shuffle from "../helpers/shuffle"
  * and that the total number of neighbors that are base elements or possible path values is less than or equal to the max path size 
  * @param map The current game map element
  * @param maxPathSize The maximum size for the path
- * @param index The index to get moves at
+ * @param searchIndex The index to get moves at
  * @param possiblePathValue The value that denotes a path
- * @param equalityFunction A function to determine if 2 elements are equal
  * @returns A shuffled and filtered array of indexes that this index can be moved at
  */
-const getNextMoves = <T>(map: mapGenerator<T>, maxPathSize: number, index: index, possiblePathValue: T, equalityFunction: equalityFunctionType<T>): index[] => {
-    const shuffled: index[] = shuffle<index>([
-        [1 +  index[0], 0 +  index[1]],
-        [0 +  index[0], 1 +  index[1]],
-        [-1 + index[0], 0 +  index[1]],
-        [0 +  index[0], -1 + index[1]]
-    ])
-
-    return shuffled.filter(element => 
-        map.isValidIndex(element) && 
-        !equalityFunction(map.getValueAtIndex(element), possiblePathValue) && 
+const getNextMoves = <T>(map: mapGenerator<T>, maxPathSize: number, searchIndex: index, possiblePathValue: T): index[] => {
+    return getConnectedIndexes(map, searchIndex).filter(element =>
+        !map.isValueAtIndexEqualToValue(element, possiblePathValue) && 
         (
             (
-                countNeighbors(map, 1, element, equalityFunction, possiblePathValue, false) 
-                + countNeighbors(map, 1, element, equalityFunction, map.getBaseValue(), false)
+                countNeighbors(map, 1, element, possiblePathValue, false) 
+                + countNeighbors(map, 1, element, map.getWalkableValue(), false)
             ) <= maxPathSize
         )
     )

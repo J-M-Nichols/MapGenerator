@@ -1,4 +1,4 @@
-import mapGenerator, { equalityFunctionType, index } from "../mapGenerator"
+import mapGenerator, { index } from "../mapGenerator"
 import getNextMoves from "./getNextMoves"
 
 /**
@@ -9,12 +9,13 @@ import getNextMoves from "./getNextMoves"
  * @param possiblePathValue A temporary value that denotes a part of the map that may be the next path
  * @param equalityFunction A function to determine if 2 elements are equal
  */
-const firstWalk = <T>(map: mapGenerator<T>, maxPathSize: number, startIndex: index, possiblePathValue: T, equalityFunction: equalityFunctionType<T>): void => {
+const firstWalk = <T>(map: mapGenerator<T>, maxPathSize: number, startIndex: index, possiblePathValue: T): void => {
     //initiates the possible path at the starting index
     map.setValueAtIndex(startIndex, possiblePathValue)
     
     //get the next moves for the walk
-    let nextIndexes = getNextMoves(map, maxPathSize, startIndex, possiblePathValue, equalityFunction)
+    let nextIndexes: index[] = getNextMoves(map, maxPathSize, startIndex, possiblePathValue)
+
     //start tracking the current path with the start index
     const currentPath: index[] = [startIndex]
 
@@ -30,8 +31,9 @@ const firstWalk = <T>(map: mapGenerator<T>, maxPathSize: number, startIndex: ind
 
             //add the current move to the path
             currentPath.push(currentIndex)
+
             //get the next moves for the current index
-            nextIndexes = getNextMoves(map, maxPathSize, currentIndex, possiblePathValue, equalityFunction)
+            nextIndexes = getNextMoves(map, maxPathSize, currentIndex, possiblePathValue)
             
             //we have a move that we can make, continue moving
             if(nextIndexes.length > 0){
@@ -44,7 +46,7 @@ const firstWalk = <T>(map: mapGenerator<T>, maxPathSize: number, startIndex: ind
 
     //now that we have finished the path, go through currentPath to assign it to base value
     currentPath.forEach(move=>{
-        map.setBaseValueAtIndex(move)
+        map.setWalkableValueAtIndex(move)
     })
 }
 

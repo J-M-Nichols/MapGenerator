@@ -1,9 +1,9 @@
-import mapGenerator, { equalityFunctionType, index } from "../../mapGenerator"
+import mapGenerator, { index } from "../../mapGenerator"
 import countNeighbors from "../countNeighbors"
 import shuffle from "../shuffle"
 import isValidHole from './isValidHole'
 
-const fillHoles = <T>(map: mapGenerator<T>, maxPathSize: number, unwalkableValue: T, equalityFunction: equalityFunctionType<T>):void => {
+const fillHoles = <T>(map: mapGenerator<T>, maxPathSize: number):void => {
     //get the dimensions of the map
     const width = map.getWidth()
     const height = map.getHeight()
@@ -14,10 +14,9 @@ const fillHoles = <T>(map: mapGenerator<T>, maxPathSize: number, unwalkableValue
     for(let i = 0; i < height; i++){
         for(let j = 0; j < width; j++){
             const index: index = [i, j]
-            const valueAtIndex = map.getValueAtIndex(index)
-            const neighborCount = countNeighbors(map, 1, index, equalityFunction, map.getBaseValue(), false)
+            const neighborCount = countNeighbors(map, 1, index, map.getWalkableValue(), false)
 
-            if(equalityFunction(valueAtIndex, unwalkableValue) && neighborCount > 0 && neighborCount < 3){
+            if(map.isIndexUnwalkable(index) && neighborCount > 0 && neighborCount < 3){
                 availableIndexes.push(index)
             }
         }
@@ -26,8 +25,8 @@ const fillHoles = <T>(map: mapGenerator<T>, maxPathSize: number, unwalkableValue
     availableIndexes = shuffle(availableIndexes)
 
     availableIndexes.forEach(el=>{
-        if(isValidHole(map, el, equalityFunction)){
-            map.setBaseValueAtIndex(el)
+        if(isValidHole(map, el)){
+            map.setWalkableValueAtIndex(el)
         }  
     })
     
@@ -35,9 +34,9 @@ const fillHoles = <T>(map: mapGenerator<T>, maxPathSize: number, unwalkableValue
     for(let i = 0; i < height; i++){
         for(let j = 0; j < width; j++){
             const index:index = [i, j]
-            const neighborCount = countNeighbors(map, 1, index, equalityFunction, map.getBaseValue(), false)
-            if(equalityFunction(map.getValueAtIndex(index), unwalkableValue) && neighborCount > 0 && neighborCount <= maxPathSize){
-                map.setBaseValueAtIndex(index)
+            const neighborCount = countNeighbors(map, 1, index, map.getWalkableValue(), false)
+            if(map.isIndexUnwalkable(index) && neighborCount > 0 && neighborCount <= maxPathSize){
+                map.setWalkableValueAtIndex(index)
             }
         }
     }

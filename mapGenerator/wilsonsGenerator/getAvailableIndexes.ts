@@ -1,23 +1,25 @@
 import countNeighbors from "../helpers/countNeighbors"
-import mapGenerator, { equalityFunctionType, index } from "../mapGenerator"
+import mapGenerator, { index } from "../mapGenerator"
 import shuffle from "../helpers/shuffle"
-import compareIndexes from "./compareIndexes"
+import compareIndexes from "../helpers/compareIndexes"
 
 /**
  * Search through the map and get the shuffled available starting points for the next paths 
  * that are not touching the main path
  * @param map The current game map element
  * @param badPaths The indexes that should be ignored
- * @param equalityFunction A function to determine if 2 elements are equal
  * @returns A shuffled index array of the possible starting points for the next path
  */
-const getAvailableIndexes = <T>(map: mapGenerator<T>, badPaths: index[], equalityFunction: equalityFunctionType<T>): index[] => {
+const getAvailableIndexes = <T>(map: mapGenerator<T>, badPaths: index[]): index[] => {
     let locations: index[] = []
 
-    for(let i = 0; i < map.getHeight(); i++){
-        for(let j = 0; j < map.getWidth(); j++){
+    const height = map.getHeight()
+    const width = map.getWidth()
+
+    for(let i = 0; i < height; i++){
+        for(let j = 0; j < width; j++){
             const index: index = [i, j]
-            if(!badPaths.some(el=>compareIndexes(el, index)) && countNeighbors(map, 1, index, equalityFunction, map.getBaseValue(), false) === 0){
+            if(!badPaths.some(el=>compareIndexes(el, index)) && countNeighbors(map, 1, index, map.getWalkableValue(), false) === 0){
                 locations.push(index)
             }
         }

@@ -26,19 +26,7 @@
 - **Path Algorithms**: Implement various algorithms for path creation and optimization, including well-known methods.
 - **Grid Navigation**: Facilitate movement and exploration within a grid, providing methods to traverse elements.
 
-## Installation
-
-To use `MapGenerator` in your project, clone the repository and import the class:
-
-```bash
-git clone <repository-url>
-```
-
-Then, import the class into your TypeScript file:
-
-```typescript
-import MapGenerator from '@ng/mapGenerator';
-```
+//instalation
 
 ## Usage
 Here’s a basic example of how to use the MapGenerator class:
@@ -96,7 +84,7 @@ Contributions are welcome! If you have ideas for improvements or new features, f
    - Clone your forked repository to your local machine using the following command:
 
      ```bash
-     git clone https://github.com/your-username/mapGenerator.git
+     git clone https://github.com/J-M-Nichols/MapGeneratorTS.git
      ```
 
 3. **Create a Branch:**

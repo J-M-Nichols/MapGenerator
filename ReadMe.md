@@ -1,5 +1,7 @@
 # MapGenerator
 
+[![npm version](https://badge.fury.io/js/typescript-map-generator.svg)](https://badge.fury.io/js/typescript-map-generator)
+
 `MapGenerator` is a TypeScript class designed for generating and managing game maps using various pathfinding and maze generation algorithms. It provides a flexible and efficient way to create and manipulate multidimensional arrays for game development and other applications.
 
 ## Features
@@ -26,7 +28,13 @@
 - **Path Algorithms**: Implement various algorithms for path creation and optimization, including well-known methods.
 - **Grid Navigation**: Facilitate movement and exploration within a grid, providing methods to traverse elements.
 
-//instalation
+## Instalation
+
+To use `mapGenerator` in your project, install it via npm:
+
+```bash
+npm install typescript-map-generator
+```
 
 ## Usage
 Here’s a basic example of how to use the MapGenerator class:

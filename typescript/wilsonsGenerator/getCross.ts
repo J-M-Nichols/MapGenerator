@@ -1,5 +1,5 @@
 import gameMap, { index } from "../gameMap"
-import shuffle from "../shuffle"
+import shuffle from "../helpers/shuffle"
 
 /**
  * Gets a shuffled and filtered index array that is 1 + x,y and 1 - x,y filtered by elements that are within the bounds of the map

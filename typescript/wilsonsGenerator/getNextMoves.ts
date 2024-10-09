@@ -1,6 +1,6 @@
-import countNeighbors from "../countNeighbors"
+import countNeighbors from "../helpers/countNeighbors"
 import gameMap, { equalityFunctionType, index } from "../gameMap"
-import shuffle from "../shuffle"
+import shuffle from "../helpers/shuffle"
 
 /**
  * Gets a shuffled array of possible indexes that are filtered based on if the index is within the bounds of the map, 
@@ -27,7 +27,7 @@ const getNextMoves = <T>(map: gameMap<T>, maxPathSize: number, index: index, pos
         (
             (
                 countNeighbors(map, 1, element, equalityFunction, possiblePathValue, false) 
-                + countNeighbors(map, 1, element, equalityFunction, map.getBaseElement(), false)
+                + countNeighbors(map, 1, element, equalityFunction, map.getBaseValue(), false)
             ) <= maxPathSize
         )
     )

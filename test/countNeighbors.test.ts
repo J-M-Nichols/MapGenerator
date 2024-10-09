@@ -1,5 +1,5 @@
 import { boolean, number } from 'yargs'
-import countNeighbors, {equalityFunctionType} from '../typescript/countNeighbors'
+import countNeighbors, {equalityFunctionType} from '../typescript/helpers/countNeighbors'
 import gameMap from '../typescript/gameMap'
 
 const baseEqualityFunction : equalityFunctionType<number> = (element: number): boolean => {

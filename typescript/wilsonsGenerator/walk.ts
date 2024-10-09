@@ -1,11 +1,11 @@
-import countNeighbors from "../countNeighbors"
+import countNeighbors from "../helpers/countNeighbors"
 import gameMap, { equalityFunctionType, index } from "../gameMap"
 import getNextMoves from './getNextMoves'
 import getConnectedIndexes from './getConnectedIndexes'
 
 /**
  * Walks through the map searching for a possible path at the startIndex then saves the path if it is valid
- * @param map  The current game map element
+ * @param map The current game map element
  * @param maxPathSize The maximum size for the path
  * @param startIndex The index that the path begins at
  * @param unwalkableValue A value that denotes a part of the map that cannot be walked on
@@ -61,7 +61,7 @@ const walk = <T>(map: gameMap<T>, maxPathSize:number, startIndex: index, unwalka
         //path has connected, set the path
         if(
             conn.length > 0 &&
-            countNeighbors(map, 1, nextMove, equalityFunction, map.getBaseElement(), false) <= maxPathSize
+            countNeighbors(map, 1, nextMove, equalityFunction, map.getBaseValue(), false) <= maxPathSize
         ){
             currentPath.push(nextMove)
             currentPath.push(conn[0])

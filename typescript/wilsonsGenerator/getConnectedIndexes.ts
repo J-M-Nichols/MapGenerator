@@ -1,4 +1,4 @@
-import countNeighbors from "../countNeighbors"
+import countNeighbors from "../helpers/countNeighbors"
 import gameMap, { equalityFunctionType, index } from "../gameMap"
 import compareIndexes from "./compareIndexes"
 import getCross from "./getCross"
@@ -18,7 +18,7 @@ const getConnectedIndexes = <T>(map: gameMap<T>, searchIndex: index, currentPath
     connectedIndexes = connectedIndexes.filter(el=>{
         if(currentPath.includes(el) || compareIndexes(el, searchIndex)) return false
 
-        const neighbors = countNeighbors(map, 1, el, equalityFunction, map.getBaseElement(), false) 
+        const neighbors = countNeighbors(map, 1, el, equalityFunction, map.getBaseValue(), false) 
 
         return neighbors > 0 && neighbors <= maxPathSize
     })

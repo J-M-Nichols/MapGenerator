@@ -1,6 +1,6 @@
-import countNeighbors from "../countNeighbors"
+import countNeighbors from "../helpers/countNeighbors"
 import gameMap, { equalityFunctionType, index } from "../gameMap"
-import shuffle from "../shuffle"
+import shuffle from "../helpers/shuffle"
 import compareIndexes from "./compareIndexes"
 
 /**
@@ -17,7 +17,7 @@ const getAvailableIndexes = <T>(map: gameMap<T>, badPaths: index[], equalityFunc
     for(let i = 0; i < map.getHeight(); i++){
         for(let j = 0; j < map.getWidth(); j++){
             const index: index = [i, j]
-            if(!badPaths.some(el=>compareIndexes(el, index)) && countNeighbors(map, 1, index, equalityFunction, map.getBaseElement(), false) === 0){
+            if(!badPaths.some(el=>compareIndexes(el, index)) && countNeighbors(map, 1, index, equalityFunction, map.getBaseValue(), false) === 0){
                 locations.push(index)
             }
         }

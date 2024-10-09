@@ -1,4 +1,4 @@
-import shuffle from '../typescript/shuffle'
+import shuffle from '../typescript/helpers/shuffle'
 
 const numbArray:number[] = [
     0,

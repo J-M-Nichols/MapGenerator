@@ -1,24 +1,16 @@
 {
-  "name": "typescript-map-generator",
-  "version": "1.0.2",
+  "name": "@nichathan-gaming/map-generator",
+  "version": "1.0.1",
   "description": "Creates and generates a 2 dimensional array with various path generation functions.",
-  "main": "./mapGenerator/mapGenerator.ts",
-  "scripts": {
-    "build": "tsc",
-    "start": "node dist/index.js",
-    "dev": "ts-node src/index.ts"
-  },
+  "main": "index.js",
+  "type": "module",
   "author": "Nichathan Gaming",
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/J-M-Nichols/MapGeneratorTS.git"
+    "url": "https://github.com/J-M-Nichols/MapGenerator.git"
   },
-  "homepage": "https://github.com/J-M-Nichols/MapGeneratorTS#readme",
-  "dependencies": {
-    "ts-node": "^10.9.2",
-    "typescript": "^5.6.2"
-  },
+  "homepage": "https://github.com/J-M-Nichols/MapGenerator#readme",
   "keywords": [
     "Typescript",
     "Map Generation",

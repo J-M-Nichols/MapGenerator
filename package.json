@@ -1,11 +1,14 @@
 {
   "name": "@nichathan-gaming/map-generator",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Creates and generates a 2 dimensional array with various path generation functions.",
   "main": "index.js",
   "type": "module",
   "author": "Nichathan Gaming",
   "license": "ISC",
+  "files": [
+    "mapGenerator"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/J-M-Nichols/MapGenerator.git"

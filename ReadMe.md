@@ -78,6 +78,7 @@ console.log(foundPath)
 
 #### Getters
 
+- `getNeighborsForPath(index: index, pathingValue: T, isOffMapPathed: boolean): [number[], number[]]`: Searches the 8 cells around an index to create an array of the neighbors that do and don't match the pathingValue
 - `areValuesAtIndexesEqual(indexA: index, indexB: index): boolean`: Determines if the values at two given indexes are equal using the provided equality function.
 - `isValueAtIndexEqualToValue(index: index, value: T): boolean`: Checks if the value at a given index is equal to a specified value.
 - `areValuesEqual(valueA: T, valueB: T): boolean`: Determines if two values are equal using the provided equality function.

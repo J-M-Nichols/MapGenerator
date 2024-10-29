@@ -1,8 +1,8 @@
 # MapGenerator
 
-[![npm version](https://badge.fury.io/js/typescript-map-generator.svg)](https://badge.fury.io/js/typescript-map-generator)
+[![npm version](https://badge.fury.io/js/@nichathan-gaming%2Fmap-generator.svg)](https://badge.fury.io/js/@nichathan-gaming%2Fmap-generator)
 
-`MapGenerator` is a TypeScript class designed for generating and managing game maps using various pathfinding and maze generation algorithms. It provides a flexible and efficient way to create and manipulate multidimensional arrays for game development and other applications.
+`MapGenerator` is a JavaScript class designed for generating and managing game maps using various pathfinding and maze generation algorithms. It provides a flexible and efficient way to create and manipulate multidimensional arrays for game development and other applications.
 
 ## Features
 
@@ -11,7 +11,6 @@
 - **Randomization**: Randomly place values on the map with specified probabilities.
 - **Index Management**: Set and get values at specific indexes with ease.
 - **Procedural Generation**: Supports procedural content generation for dynamic map creation.
-- **TypeScript**: Strongly typed language that compiles to JavaScript, providing static type checking and modern JavaScript features.
 - **Map Generation**: Create and manage 2D maps with customizable dimensions and base values.
 - **Pathfinding**: Implement algorithms to find paths through a grid, useful for navigation and route optimization.
 - **Maze Generation**: Generate mazes using different algorithms, providing structured paths and challenges.
@@ -33,13 +32,13 @@
 To use `mapGenerator` in your project, install it via npm:
 
 ```bash
-npm install typescript-map-generator
+npm install @nichathan-gaming/map-generator
 ```
 
 ## Usage
 Here’s a basic example of how to use the MapGenerator class:
 
-```typescript
+```javascript
 //define base values
 const equalityFunction: equalityFunctionType<number> = (a:number, b:number):boolean=>a===b
 const startingIndex: index = [0, 0]
@@ -141,7 +140,7 @@ Contributions are welcome! If you have ideas for improvements or new features, f
    - Clone your forked repository to your local machine using the following command:
 
      ```bash
-     git clone https://github.com/J-M-Nichols/MapGeneratorTS.git
+     git clone https://github.com/J-M-Nichols/MapGenerator.git
      ```
 
 3. **Create a Branch:**

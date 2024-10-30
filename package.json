@@ -1,6 +1,6 @@
 {
   "name": "@nichathan-gaming/map-generator",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Creates and generates a 2 dimensional array with various path generation functions.",
   "main": "index.js",
   "type": "module",
@@ -33,6 +33,6 @@
     "Grid Navigation"
   ],
   "dependencies": {
-    "@nichathan-gaming/assertions": "^1.0.4"
+    "@nichathan-gaming/assertions": "^1.0.5"
   }
 }

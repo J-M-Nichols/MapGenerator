@@ -115,6 +115,10 @@ console.log(foundPath)
 
 #### Helpers
 
+- `findDisplayIndex(index: index, pathingValue: T, isOffMapPathed: boolean): index`: Finds the display index for Nichathan Gaming's mapRenderer
+- `addBorder(size: number, value: T): mapGenerator<T>`: Adds a border to this mapGenerator.
+- `addWalkableBorder(size: number): mapGenerator<T>`: Adds a border to this mapGenerator. With the walkableValue for the border.
+- `addUnwalkableBorder(size: number): mapGenerator<T>`: Adds a border to this mapGenerator. With the unwalkableValue for the border.
 - `multiplyMap(amount: number): mapGenerator<T>`: Increases the map by the given amount.
 - `logMap(): mapGenerator<T>`: Logs the current state of the multidimensional array to the console.
 - `static shuffleArray<U>(array: U[]): U[]`: Shuffles the elements of an array and returns the shuffled array.

@@ -115,6 +115,7 @@ console.log(foundPath)
 
 #### Helpers
 
+- `multiplyMap(amount: number): mapGenerator<T>`: Increases the map by the given amount.
 - `logMap(): mapGenerator<T>`: Logs the current state of the multidimensional array to the console.
 - `static shuffleArray<U>(array: U[]): U[]`: Shuffles the elements of an array and returns the shuffled array.
 

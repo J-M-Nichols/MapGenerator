@@ -1,6 +1,6 @@
 {
   "name": "@nichathan-gaming/map-generator",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Creates and generates a 2 dimensional array with various path generation functions.",
   "main": "index.js",
   "type": "module",
